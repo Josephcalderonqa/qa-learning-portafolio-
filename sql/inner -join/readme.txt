@@ -1,1 +1,0 @@
-Ejercicios de inner join
