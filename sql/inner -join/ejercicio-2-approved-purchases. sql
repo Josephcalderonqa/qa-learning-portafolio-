@@ -1,0 +1,64 @@
+# Ejercicio 2 - INNER JOIN validando compras aprobadas
+
+## Objetivo
+
+Obtener las compras aprobadas realizadas por usuarios, mostrando:
+
+- ID de la compra
+- Nombre del usuario
+- Número de tarjeta
+- Comercio
+- Monto
+- Estado
+
+Ordenando los resultados por monto de mayor a menor.
+
+---
+
+## Modelo relacional
+
+purchases ? cards ? users
+
+- purchases guarda la tarjeta utilizada en la compra.
+- cards guarda el propietario de la tarjeta.
+- users contiene la información del usuario.
+
+---
+
+## Consulta SQL
+
+```sql
+SELECT
+    p.purchase_id,
+    u.full_name,
+    c.card_number,
+    p.commerce,
+    p.amount,
+    p.status
+
+FROM purchases p
+
+INNER JOIN cards c
+    ON p.card_id = c.card_id
+
+INNER JOIN users u
+    ON c.user_id = u.user_id
+
+WHERE p.status = 'APPROVED'
+
+ORDER BY p.amount DESC;
+
+----
+
+Conceptos practicados
+INNER JOIN
+Relaciones one-to-many
+Foreign Keys
+Navegación relacional
+Uso de aliases
+Filtros con WHERE
+Ordenamiento con ORDER BY
+------
+Pensamiento backend orientado a transacciones
+Escenario orientado a banca/fintech
+Validación de compras aprobadas asociadas a usuarios y tarjetas dentro de un sistema financiero.

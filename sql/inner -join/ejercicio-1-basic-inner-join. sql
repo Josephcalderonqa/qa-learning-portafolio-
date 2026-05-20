@@ -1,0 +1,85 @@
+# Ejercicio 2 - INNER JOIN con cuentas origen y destino
+
+## Objetivo
+
+Consultar transferencias exitosas, identificando el usuario que envía, el usuario que recibe, el monto y el estado de la transacción.
+
+---
+
+## Contexto QA Backend
+
+En un sistema fintech, una transferencia no guarda directamente el nombre del remitente ni del destinatario.
+
+La tabla de transferencias solo almacena la cuenta origen y la cuenta destino.  
+Por eso, como QA backend, se debe navegar entre tablas para validar correctamente quién envió y quién recibió el dinero.
+
+---
+
+## Tablas utilizadas
+
+- `users`
+- `accounts`
+- `transfers`
+
+---
+
+## Lógica relacional
+
+```text
+transfers
+ +-- source_account_id
+ ¦        +-- accounts
+ ¦               +-- users (sender)
+ ¦
+ +-- target_account_id
+          +-- accounts
+                 +-- users (receiver)
+```
+
+---
+
+## Consulta SQL
+
+```sql
+SELECT
+    t.transfer_id,
+    su.full_name AS sender_name,
+    ru.full_name AS receiver_name,
+    t.amount,
+    t.status
+
+FROM transfers t
+
+INNER JOIN accounts sa
+    ON t.source_account_id = sa.account_id
+
+INNER JOIN users su
+    ON sa.user_id = su.user_id
+
+INNER JOIN accounts ra
+    ON t.target_account_id = ra.account_id
+
+INNER JOIN users ru
+    ON ra.user_id = ru.user_id
+
+WHERE t.status = 'SUCCESS';
+```
+
+---
+
+## Conceptos practicados
+
+- INNER JOIN
+- Uso de aliases
+- Reutilización de una misma tabla en diferentes roles
+- Relación cuenta origen
+- Relación cuenta destino
+- Filtros con WHERE
+- Validación de transferencias exitosas
+- Navegación relacional entre tablas
+
+---
+
+## Escenario QA Backend
+
+Validación de integridad relacional en transferencias fintech, verificando que una transacción pueda asociarse correctamente con el usuario remitente y el usuario destinatario.
