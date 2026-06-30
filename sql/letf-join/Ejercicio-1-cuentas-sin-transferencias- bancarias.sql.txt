@@ -1,0 +1,76 @@
+Ejercicio 2 - LEFT JOIN para validación de cuentas sin transferencias bancarias
+Objetivo
+Consultar cuentas bancarias que no han realizado transferencias, identificando:
+Nombre del usuario
+Número de cuenta
+Mostrando únicamente cuentas sin transferencias registradas.
+Contexto QA Backend
+En plataformas fintech y sistemas bancarios es frecuente validar entidades que aún no presentan movimientos transaccionales.
+En este caso, se requiere detectar cuentas bancarias sin transferencias registradas, permitiendo identificar:
+cuentas inactivas,
+usuarios sin actividad financiera,
+posibles errores de integración,
+cuentas recientemente creadas,
+o ausencia de movimientos esperados dentro del sistema.
+Este tipo de validaciones es muy común en QA backend, monitoreo operacional y análisis funcional de datos.
+Tablas utilizadas
+accounts
+users
+bank_transfers
+
+Lógica relacional
+Plain text
+accounts
+¦
++-- user_id
+¦      +-- users
+¦
++-- account_id
+       +-- bank_transfers
+
+Consulta SQL
+
+SQL
+SELECT
+    u.full_name,
+    a.account_number
+
+FROM accounts a
+
+LEFT JOIN bank_transfers b
+    ON a.account_id = b.account_id
+
+LEFT JOIN users u
+    ON a.user_id = u.user_id
+
+WHERE b.transfer_id IS NULL;
+
+Explicación técnica
+La consulta conserva todas las cuentas bancarias mediante LEFT JOIN, incluso aquellas que no tienen relación con la tabla bank_transfers.
+Cuando una cuenta no posee transferencias asociadas:
+SQL
+b.transfer_id
+queda en:
+Plain text
+NULL
+Por esta razón, el filtro:
+SQL
+WHERE b.transfer_id IS NULL
+permite detectar específicamente cuentas sin movimientos de transferencia registrados.
+Conceptos practicados
+LEFT JOIN
+Detección de registros sin relación
+Uso de IS NULL
+Navegación relacional
+Foreign Keys
+Uso de aliases
+Validaciones backend orientadas a ausencia de datos
+Diferencias entre INNER JOIN y LEFT JOIN
+Identificación de entidades sin transacciones asociadas
+Escenario orientado a banca/fintech
+Validación de cuentas bancarias sin transferencias registradas, verificando correctamente:
+usuario propietario de la cuenta,
+cuentas sin actividad financiera,
+ausencia de movimientos asociados,
+posibles usuarios inactivos,
+o inconsistencias funcionales dentro del ecosistema transaccional.

@@ -1,1 +1,0 @@
-ejercicios de group by
