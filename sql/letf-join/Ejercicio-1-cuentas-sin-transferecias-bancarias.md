@@ -1,76 +1,108 @@
-Ejercicio 1 - LEFT JOIN para validación de cuentas sin transferencias bancarias
-Objetivo
-Consultar cuentas bancarias que no han realizado transferencias, identificando:
-Nombre del usuario
-Número de cuenta
-Mostrando únicamente cuentas sin transferencias registradas.
-Contexto QA Backend
-En plataformas fintech y sistemas bancarios es frecuente validar entidades que aún no presentan movimientos transaccionales.
-En este caso, se requiere detectar cuentas bancarias sin transferencias registradas, permitiendo identificar:
-cuentas inactivas,
-usuarios sin actividad financiera,
-posibles errores de integración,
-cuentas recientemente creadas,
-o ausencia de movimientos esperados dentro del sistema.
-Este tipo de validaciones es muy común en QA backend, monitoreo operacional y análisis funcional de datos.
-Tablas utilizadas
-accounts
+ï»¿# Ejercicio 1 - LEFT JOIN para validaciÃ³n de cuentas sin transferencias bancarias
+
+## Objetivo
+
+Consultar las cuentas bancarias que **no han realizado transferencias**, identificando:
+
+- Nombre del usuario.
+- NÃºmero de cuenta.
+
+Mostrando Ãºnicamente las cuentas que no tienen transferencias registradas.
+
+---
+
+## Contexto QA Backend
+
+En plataformas **fintech** y sistemas bancarios es frecuente validar entidades que aÃºn no presentan movimientos transaccionales.
+
+Este escenario permite detectar:
+
+- Cuentas inactivas.
+- Usuarios sin actividad financiera.
+- Posibles errores de integraciÃ³n.
+- Cuentas recientemente creadas.
+- Ausencia de movimientos esperados dentro del sistema.
+
+Este tipo de validaciones es comÃºn en procesos de **QA Backend**, monitoreo operacional y anÃ¡lisis funcional de datos.
+
+---
+
+## Tablas utilizadas
+
+- `accounts`
+- `users`
+- `bank_transfers`
+
+---
+
+## LÃ³gica relacional
+
+```text
 users
-bank_transfers
-
-Lógica relacional
-Plain text
+  â”‚
+  â””â”€â”€ user_id
+       â”‚
 accounts
-¦
-+-- user_id
-¦      +-- users
-¦
-+-- account_id
-       +-- bank_transfers
+  â”‚
+  â””â”€â”€ account_id
+       â”‚
+bank_transfers
+```
 
-Consulta SQL
+---
 
-SQL
+## Consulta SQL
+
+```sql
 SELECT
     u.full_name,
     a.account_number
-
 FROM accounts a
-
 LEFT JOIN bank_transfers b
     ON a.account_id = b.account_id
-
 LEFT JOIN users u
     ON a.user_id = u.user_id
-
 WHERE b.transfer_id IS NULL;
+```
 
-Explicación técnica
-La consulta conserva todas las cuentas bancarias mediante LEFT JOIN, incluso aquellas que no tienen relación con la tabla bank_transfers.
-Cuando una cuenta no posee transferencias asociadas:
-SQL
-b.transfer_id
-queda en:
-Plain text
-NULL
-Por esta razón, el filtro:
-SQL
+---
+
+## ExplicaciÃ³n tÃ©cnica
+
+La consulta utiliza **LEFT JOIN** para conservar todas las cuentas bancarias, incluso aquellas que no tienen registros en la tabla `bank_transfers`.
+
+Cuando una cuenta no posee transferencias asociadas, el campo `b.transfer_id` toma el valor **NULL**.
+
+Por esta razÃ³n, el filtro:
+
+```sql
 WHERE b.transfer_id IS NULL
-permite detectar específicamente cuentas sin movimientos de transferencia registrados.
-Conceptos practicados
-LEFT JOIN
-Detección de registros sin relación
-Uso de IS NULL
-Navegación relacional
-Foreign Keys
-Uso de aliases
-Validaciones backend orientadas a ausencia de datos
-Diferencias entre INNER JOIN y LEFT JOIN
-Identificación de entidades sin transacciones asociadas
-Escenario orientado a banca/fintech
-Validación de cuentas bancarias sin transferencias registradas, verificando correctamente:
-usuario propietario de la cuenta,
-cuentas sin actividad financiera,
-ausencia de movimientos asociados,
-posibles usuarios inactivos,
-o inconsistencias funcionales dentro del ecosistema transaccional.
+```
+
+permite identificar Ãºnicamente las cuentas que aÃºn no registran movimientos de transferencia.
+
+---
+
+## Conceptos practicados
+
+- LEFT JOIN
+- Uso de `IS NULL`
+- DetecciÃ³n de registros sin relaciÃ³n
+- NavegaciÃ³n mediante claves forÃ¡neas (Foreign Keys)
+- Uso de alias en consultas SQL
+- Validaciones backend orientadas a ausencia de datos
+- Diferencias entre INNER JOIN y LEFT JOIN
+
+---
+
+## Escenario QA Backend
+
+Este ejercicio simula una validaciÃ³n frecuente en plataformas bancarias y fintech para identificar cuentas sin actividad transaccional.
+
+Permite verificar correctamente:
+
+- El usuario propietario de la cuenta.
+- Cuentas sin actividad financiera.
+- Ausencia de movimientos asociados.
+- Posibles usuarios inactivos.
+- Inconsistencias funcionales dentro del ecosistema transaccional.
