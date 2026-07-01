@@ -1,4 +1,4 @@
-Ejercicio 2 - LEFT JOIN para validación de cuentas sin transferencias bancarias
+Ejercicio 1 - LEFT JOIN para validación de cuentas sin transferencias bancarias
 Objetivo
 Consultar cuentas bancarias que no han realizado transferencias, identificando:
 Nombre del usuario
